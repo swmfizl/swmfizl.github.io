@@ -6,7 +6,7 @@
 	axios !== null ? factory(global, axios) : null
 })(this, function(global, axios) {
 	'use strict';
-	const ADDRESS = "http://localhost:8080";
+	const ADDRESS = "http://api.swmfizl.com:3975/jcloud";
 	const API = {
 		login: "/login",
 		userQuery: "/userQuery",
