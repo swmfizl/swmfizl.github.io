@@ -1,0 +1,149 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	min-width: 1240px;
+	height: 100%;
+}
+
+/* 清除浮动 */
+
+.clear:after {
+	display: block;
+	clear: both;
+	content: "";
+	visibility: hidden;
+	height: 0;
+}
+
+.clear {
+	zoom: "1";
+}
+
+/* 隐藏滚动条 */
+*::-webkit-scrollbar {
+	/* 隐藏谷歌/Safari滚动条 */
+	display: none;
+}
+
+* {
+	/* 隐藏获取浏览器滚动条 */
+	scrollbar-width: none;
+	/* 隐藏IE和Edge浏览器滚动条 */
+	-ms-overflow-style: none;
+}
+
+[v-cloak] {
+	display: none;
+}
+
+.hide {
+	display: none;
+}
+
+.left {
+	float: left;
+	display: block;
+}
+
+.right {
+	float: right;
+	display: block;
+}
+
+.overflowOne {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.pBtnOne {
+	background-color: rgb(24, 144, 255);
+	color: #FFFFFF;
+	text-align: center;
+	padding: 7px 0;
+	border-radius: 5px;
+	cursor: pointer;
+	width: 100%;
+	display: inline-block;
+}
+
+#YunLiAdmin {
+	height: 100%;
+}
+
+#YunLiAdmin .mainBox {
+	height: 100%;
+}
+
+#YunLiAdmin .mainBox .menuBar {
+	height: 100%;
+	background-color: rgb(50, 65, 87);
+	overflow-y: auto;
+}
+
+#YunLiAdmin .mainBox .menuBar ul {
+	border: none;
+}
+
+#YunLiAdmin .mainBox .menuBar .elMenuStyleOne .el-submenu .el-submenu__title:hover {
+	background-color: rgb(40, 52, 70) !important;
+}
+
+#YunLiAdmin .mainBox .menuBar .elMenuStyleOne .el-submenu .el-menu-item {
+	padding-left: 70px !important;
+}
+
+#YunLiAdmin .mainBox .menuBar .elMenuStyleOne .el-submenu .el-menu-item:hover {
+	background-color: rgb(40, 52, 70) !important;
+}
+
+#YunLiAdmin .mainBox .faceBox {
+	height: 100%;
+}
+
+#YunLiAdmin .mainBox .faceBox .headBox {
+	background-color: #242f42;
+	color: #FFFFFF;
+	padding: 20px 0;
+}
+
+#YunLiAdmin .mainBox .faceBox .headBox .breadcrumbIcon {
+	font-weight: 800;
+	margin-left: 20px;
+
+}
+
+#YunLiAdmin .mainBox .faceBox .headBox .breadcrumb {
+	margin-left: 10px;
+}
+
+#YunLiAdmin .mainBox .faceBox .headBox .breadcrumb .el-breadcrumb__inner {
+	color: #FFFFFF;
+}
+
+#YunLiAdmin .mainBox .faceBox .headBox .breadcrumb .el-breadcrumb__separator {
+	color: #FFFFFF;
+}
+
+#YunLiAdmin .mainBox .faceBox .headBox .btnIcon {
+	margin-right: 10px;
+}
+
+#YunLiAdmin .mainBox .faceBox .headBox .userName {
+	line-height: 16px;
+	margin-right: 20px;
+}
+
+#YunLiAdmin .mainBox .faceBox .pageBox {
+	height: -webkit-calc(100% - 56px);
+	height: -moz-calc(100% - 56px);
+	height: calc(100% - 56px);
+	overflow-y: auto;
+}

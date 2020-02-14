@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>云力 | 登陆</title>
+		<link rel="stylesheet" type="text/css" href="lib/elementui/index.css" />
+		<link rel="stylesheet" type="text/css" href="css/global.css" />
+		<link rel="stylesheet" type="text/css" href="css/login.css" />
+	</head>
+
+	<body>
+		<div id="Login" v-cloak>
+			<div class="loginBox">
+				<p class="title">系统登陆</p>
+				<div class="inputBox">
+					<i class="el-icon-user icon"></i>
+					<input @keyup.enter="login" class="text" type="text" placeholder="请输入账号" v-model="account" />
+				</div>
+				<div class="inputBox">
+					<i class="el-icon-lock icon"></i>
+					<input @keyup.enter="login" class="text" type="password" placeholder="请输入秘密" v-model="password" />
+				</div>
+				<p class="pBtnOne" @click="login">登陆</p>
+			</div>
+			<a class="websiteFiling" href="http://www.beian.miit.gov.cn" target="_blank">备案：粤ICP备17116328号-1</a>
+		</div>
+	</body>
+	<script src="lib/vue/vue-2.6.10.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lib/vue/axios-0.19.0.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lib/elementui/index.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jcloud.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/util.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/login.js" type="text/javascript" charset="utf-8"></script>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>云力 | 互联网的力量</title>
+		<!-- ElementUI -->
+		<link rel="stylesheet" type="text/css" href="../lib/elementui/index.css" />
+		<!-- CodeMirror -->
+		<link rel="stylesheet" href="../lib/codemirror/lib/codemirror.css">
+		<link rel="stylesheet" href="../lib/codemirror/addon/lint/lint.css">
+		<!-- Project -->
+		<link rel="stylesheet" type="text/css" href="../css/global.css" />
+		<link rel="stylesheet" type="text/css" href="../css/home.css" />
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<div id="YunLiAdmin" v-cloak>
+			<el-row class="mainBox">
+				<!-- 左侧菜单 -->
+				<el-col :span="4" class="menuBar">
+					<el-menu :default-active="indexPage" class="el-menu-vertical-demo elMenuStyleOne" background-color="rgb(50, 65, 87)"
+					 text-color="#fff" active-text-color="#ffd04b">
+						<el-submenu v-for="(submenu, index) in menuBar" :key="index" :index="submenu.index">
+							<template slot="title">
+								<i :class="submenu.icon"></i>
+								<span>{{submenu.text}}</span>
+							</template>
+							<el-menu-item-group class="menuGroup">
+								<el-menu-item @click="toMenuPage(submenu, item)" v-for="(item, index) in submenu.sub" :key="index" :index="item.index">{{item.text}}</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+					</el-menu>
+				</el-col>
+				<!-- 右侧窗口 -->
+				<el-col :span="20" class="faceBox">
+					<!-- 右侧头部 -->
+					<div class="headBox clear">
+						<i class="breadcrumbIcon left" :class="breadcrumb.icon"></i>
+						<el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb left">
+							<el-breadcrumb-item v-for="(item, index) in breadcrumb.path" :key="null">{{item}}</el-breadcrumb-item>
+						</el-breadcrumb>
+						<p class="right userName">{{account.user.name}}</p>
+						<i class="el-icon-message-solid btnIcon right" title="公告信息"></i>
+					</div>
+
+					<!-- 活动窗口 -->
+					<div class="pageBox" v-loading="loading">
+						<!-- 账户信息 -->
+						<div id="AccountInfo" class="accountInfo" v-show="indexPage=='1-1'">
+							<div class="infoBox">
+								<p class="nameText">企业信息</p>
+								<div class="itemBox">
+									<p class="itemText" v-for="(value, key) in accountInfoMap.unit"><span>{{value}}：</span> {{account.unit[key]}}</p>
+								</div>
+							</div>
+							<div class="infoBox">
+								<p class="nameText">用户信息</p>
+								<div class="itemBox">
+									<p class="itemText" v-for="(value, key) in accountInfoMap.user"><span>{{value}}：</span> {{account.user[key]}}</p>
+								</div>
+							</div>
+						</div>
+						<!-- 数据中心-新增记录 -->
+						<div id="DataCenterAdd" v-show="indexPage=='2-1'&&dataCenterPermitList.length>0">
+							<div class="headMenuBox clear">
+								<div class="collectionBox left">
+									<p class="txtLabel">数据库：</p>
+									<el-select v-model="selectDataCenterPermit" placeholder="请选择数据库">
+										<el-option v-for="item in dataCenterPermitList" :key="item.id" :label="item.collection" :value="item.collection">
+										</el-option>
+									</el-select>
+								</div>
+
+								<div class="collectionHintBox left">
+									<p class="txtLabel">描述：{{getSelectDataCenterPermit().brief}}</p>
+								</div>
+							</div>
+							<textarea id="EditorJsonAdd" class="hide"></textarea>
+							<div class="menuBox">
+								<p class="pBtnOne saveBtn" @click="formatEditorJsonAdd">格式化</p>
+								<p class="pBtnOne saveBtn" @click="submitEditorJsonAdd">新增</p>
+								<p class="pBtnOne saveBtn" @click="emptyEditorJsonAdd">清空</p>
+							</div>
+						</div>
+						<!-- 数据中心-管理记录 -->
+						<div id="DataCenterList" v-show="indexPage=='2-2'&&dataCenterPermitList.length>0">
+							<div class="headMenuBox clear" v-show="!isEditJsonData">
+								<div class="collectionBox left">
+									<p class="txtLabel">数据库：</p>
+									<el-select @change="changeDataCenterPermit" v-model="selectDataCenterPermit" placeholder="请选择数据库">
+										<el-option v-for="item in dataCenterPermitList" :key="item.id" :label="item.collection" :value="item.collection">
+										</el-option>
+									</el-select>
+								</div>
+
+								<div class="collectionHintBox left">
+									<p class="txtLabel">描述：{{getSelectDataCenterPermit().brief}}</p>
+								</div>
+							</div>
+							<div class="dataListBox" v-show="!isEditJsonData">
+								<el-table :data="dataList" style="width: 100%">
+									<el-table-column label="ID" width="250">
+										<template slot-scope="scope">
+											<span>{{ scope.row.id }}</span>
+										</template>
+									</el-table-column>
+									<el-table-column label="描述" width="350">
+										<template slot-scope="scope">
+											<span class="overflowOne">{{ scope.row.desk }}</span>
+										</template>
+									</el-table-column>
+									<el-table-column label="创建时间" width="180">
+										<template slot-scope="scope">
+											<span>{{ scope.row.time }}</span>
+										</template>
+									</el-table-column>
+									<el-table-column label="操作">
+										<template slot-scope="scope">
+											<el-button size="mini" @click="editData(scope.row)">编辑</el-button>
+											<el-button size="mini" type="danger" @click="deleteData(scope.row)">删除</el-button>
+										</template>
+									</el-table-column>
+								</el-table>
+								<div class="paginationBox">
+									<el-pagination @current-change="dataChangePageIndex" @size-change="dataChangePageSize" :page-sizes="[10, 30, 50, 100]"
+									 :page-size="dataPageSize" :current-page="dataPageIndex" background layout="sizes, prev, pager, next" :total="dataSum">
+									</el-pagination>
+								</div>
+							</div>
+							<div class="eidtJsonBox" v-show="isEditJsonData">
+								<textarea id="EditorJsonEdit" class="hide"></textarea>
+								<div class="menuBox">
+									<p class="pBtnOne saveBtn" @click="formatEditorJsonEdit">格式化</p>
+									<p class="pBtnOne saveBtn" @click="submitEditorJsonEdit">更新</p>
+									<p class="pBtnOne saveBtn" @click="closeEditorJsonEdit">返回</p>
+								</div>
+							</div>
+						</div>
+						<!-- 文件系统-上传文件 -->
+						<div id="UploadFile" v-show="indexPage=='3-1'&&fileSystemPermitList.length>0">
+							<div class="headMenuBox clear">
+								<div class="collectionBox left">
+									<p class="txtLabel">文件夹：</p>
+									<el-select v-model="selectFileSystemPermit" placeholder="请选择文件夹">
+										<el-option v-for="item in fileSystemPermitList" :key="item.id" :label="item.collection" :value="item.collection">
+										</el-option>
+									</el-select>
+								</div>
+								<div class="collectionHintBox left">
+									<p class="txtLabel">描述：{{getSelectFilfSystemPermit().brief}}</p>
+								</div>
+							</div>
+							<el-upload class="uploadBox" name="file" ref="fileUpload" :multiple="true" :limit="10" :headers="fileUploadConf.headers"
+							 :action="fileUploadConf.url" :data="fileUploadConf.data" :auto-upload="false" :on-success="fileUploadSuccess">
+								<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+								<el-button style="margin-left: 10px;" size="small" type="success" @click="submitFileUpload">上传到服务器</el-button>
+								<div slot="tip" class="el-upload__tip">单个文件不得大于50MB，所有文件总大小不超过200MB，最多一次性上传10个</div>
+							</el-upload>
+						</div>
+						<!-- 文件系统-管理文件 -->
+						<div id="FileSystemList" v-show="indexPage=='3-2'&&fileSystemPermitList.length>0">
+							<div class="headMenuBox clear">
+								<div class="collectionBox left">
+									<p class="txtLabel">文件夹：</p>
+									<el-select @change="changeFileSystemPermit" v-model="selectFileSystemPermit" placeholder="请选择文件夹">
+										<el-option v-for="item in fileSystemPermitList" :key="item.id" :label="item.collection" :value="item.collection">
+										</el-option>
+									</el-select>
+								</div>
+								<div class="collectionHintBox left">
+									<p class="txtLabel">描述：{{getSelectFilfSystemPermit().brief}}</p>
+								</div>
+							</div>
+							<el-table :data="fileList" style="width: 100%">
+								<el-table-column label="ID" width="250">
+									<template slot-scope="scope">
+										<span>{{ scope.row.id }}</span>
+									</template>
+								</el-table-column>
+								<el-table-column label="名称" width="350">
+									<template slot-scope="scope">
+										<span class="overflowOne">{{ scope.row.name }}</span>
+									</template>
+								</el-table-column>
+								<el-table-column label="上传时间" width="180">
+									<template slot-scope="scope">
+										<span>{{ scope.row.uploadTime }}</span>
+									</template>
+								</el-table-column>
+								<el-table-column label="操作">
+									<template slot-scope="scope">
+										<el-popover placement="top-start" title="资源访问路径" width="350" trigger="hover" :content="scope.row.url">
+											<el-button class="resourceBtn" slot="reference">地址</el-button>
+										</el-popover>
+										<el-button size="mini" type="danger" @click="deleteFile(scope.row)">删除</el-button>
+									</template>
+								</el-table-column>
+							</el-table>
+							<div class="paginationBox">
+								<el-pagination @size-change="fileChangePageSize" @current-change="fileChangePageIndex" background :page-sizes="[10, 30, 50, 100]"
+								 :page-size="filePageSize" :current-page="filePageIndex" layout="sizes, prev, pager, next" :total="fileSum">
+								</el-pagination>
+							</div>
+						</div>
+						<!-- API文档 -->
+						<div id="DocumentBox" v-show="indexPage=='4-1' || indexPage=='4-2'">
+							<iframe class="documentWindow" :src="documentBoxUrl" width="100%" height="100%"></iframe>
+						</div>
+						<!-- 功能暂未开放 -->
+						<div id="HintBox" v-show="false">
+							<p class="pHint">功能暂未开放</p>
+						</div>
+					</div>
+				</el-col>
+			</el-row>
+		</div>
+	</body>
+	<!-- Vue -->
+	<script src="../lib/vue/vue-2.6.10.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lib/vue/axios-0.19.0.js" type="text/javascript" charset="utf-8"></script>
+	<!-- ElementUI -->
+	<script src="../lib/elementui/index.js" type="text/javascript" charset="utf-8"></script>
+	<!-- CodeMirror -->
+	<script src="../lib/codemirror/lib/codemirror.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lib/codemirror/mode/javascript/javascript.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lib/codemirror/mode/css/css.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lib/codemirror/lint/jsonlint.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lib/codemirror/addon/lint/lint.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lib/codemirror/addon/lint/json-lint.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lib/codemirror/addon/format/format.js.js" type="text/javascript" charset="utf-8"></script>
+	<!-- Project -->
+	<script src="../js/jcloud.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/config.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/util.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/home.js" type="text/javascript" charset="utf-8"></script>
+</html>
