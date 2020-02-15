@@ -1,0 +1,46 @@
+.clear:after {
+	display: block;
+	clear: both;
+	content: "";
+	visibility: hidden;
+	height: 0;
+}
+
+.clear {
+	zoom: "1";
+}
+
+[v-cloak] {
+	display: none;
+}
+
+.hide {
+	display: none;
+}
+
+.left {
+	float: left;
+	display: block;
+}
+
+.right {
+	float: right;
+	display: block;
+}
+
+.ellipsis {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.btn-blue {
+	background-color: rgb(24, 144, 255);
+	color: #FFFFFF;
+	text-align: center;
+	padding: 7px 0px;
+	border-radius: 5px;
+	cursor: pointer;
+	width: 80px;
+	display: inline-block;
+}

@@ -1,0 +1,26 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	min-width: 1240px;
+	height: 100%;
+}
+
+/* 隐藏滚动条 */
+*::-webkit-scrollbar {
+	/* 隐藏谷歌/Safari滚动条 */
+	display: none;
+}
+
+* {
+	/* 隐藏火狐浏览器滚动条 */
+	scrollbar-width: none;
+	/* 隐藏IE和Edge浏览器滚动条 */
+	-ms-overflow-style: none;
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>云管理 | 登陆</title>
+		<link rel="stylesheet" type="text/css" href="lib/elementui/index.css" />
+		<link rel="stylesheet" type="text/css" href="css/yunli.css" />
+		<link rel="stylesheet" type="text/css" href="css/global.css" />
+		<style type="text/css">
+			body {
+				background-color: rgb(50, 65, 87);
+			}
+
+			#Login .loginBox {
+				width: 520px;
+				margin: 0 auto;
+				margin-top: 160px;
+			}
+
+			#Login .loginBox .title {
+				color: #FFFFFF;
+				font-size: 28px;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			#Login .loginBox .inputBox {
+				width: 100%;
+				background-color: rgb(40, 52, 70);
+				margin-top: 20px;
+				border: 1px solid #555555;
+				border-radius: 5px;
+			}
+
+			#Login .loginBox .inputBox .icon {
+				color: #FFFFFF;
+				width: 8%;
+				text-align: center;
+			}
+
+			#Login .loginBox .inputBox .text {
+				width: 90%;
+				background-color: rgb(40, 52, 70);
+				border: none;
+				padding: 15px 0;
+				color: #FFFFFF;
+				outline: none
+			}
+
+			#Login .loginBox .btn-blue {
+				margin-top: 20px;
+				width: 100%;
+			}
+
+			#Login .hintText {
+				color: #FFFFFF;
+				margin-top: 30px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="Login" v-cloak>
+			<div class="loginBox">
+				<p class="title">系统登陆</p>
+				<div class="inputBox">
+					<i class="el-icon-user icon"></i>
+					<input @keyup.enter="login" class="text" type="text" placeholder="请输入账号" v-model="account" />
+				</div>
+				<div class="inputBox">
+					<i class="el-icon-lock icon"></i>
+					<input @keyup.enter="login" class="text" type="password" placeholder="请输入秘密" v-model="password" />
+				</div>
+				<p class="btn-blue" @click="login">登陆</p>
+
+				<p class="hintText">账号：随便填&nbsp;&nbsp;|&nbsp;&nbsp;密码：随便填</p>
+			</div>
+		</div>
+	</body>
+	<script src="lib/vue/vue-2.6.10.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lib/elementui/index.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/util.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: "#Login",
+			data: {
+				account: "",
+				password: ""
+			},
+			methods: {
+				login: function() {
+					if (!this.account) {
+						this.$message({
+							showClose: true,
+							message: '请输入账号！',
+							type: 'error'
+						});
+						return;
+					}
+					if (!this.password) {
+						this.$message({
+							showClose: true,
+							message: '请输入密码！',
+							type: 'error'
+						});
+						return;
+					}
+					document.cookie = "token=" + Util.uuid() + "; path=/";
+					// window.location.href = window.location.href.split("/index.html")[0] + "/page/home.html"
+				}
+			},
+			mounted: function() {
+				// if (Util.getCookie("token")) {
+				// 	window.location.href = window.location.href.split("/index.html")[0] + "/page/home.html"
+				// }
+			}
+		})
+	</script>
+</html>
